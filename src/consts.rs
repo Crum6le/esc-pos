@@ -16,15 +16,18 @@ def_const_bytes! {
     SP => 0x20
 
 }
-def_cmd! {
+def_cmd! { //Every Command has to be checked for Printer
     HORIZONTAL_TAB => [HT],
     LINE_FEED => [LF],
-    PRINT_AND_RETURN_TO_STANDARD => [FF],
+    PRINT_AND_RETURN_TO_STANDARD_MODE => [FF], //only in Page Mode
+    END_JOB => [FF], //only in Standard Mode
     PRINT_AND_CARRIAGE_RETURN => [CR],
     TRANSMIT_REALTTIME_STAUTS => [DLE, EOT],
     SEND_REALTIME_REQUEST => [DLE, ENQ],
     GENERATE_PULSE => [DLE, DC4, 1],
     EXECUTE_POWER_OFF => [DLE, DC4, 2],
+    SOUND_BUZZER => [DLE, DC4, 3],
+    TRANSMIT_SPECIFIED_STATUS => [DLE, DC4, 7],
     CLEAR_BUFFER => [DLE, DC4, 8],
     CANCEL_PRINT_DATA => [CAN],
     PRINT_DATA_IN_PAGEMODE => [ESC, FF],
@@ -33,10 +36,13 @@ def_cmd! {
     SET_ABSOLUTE_PRINT_POSITION => [ESC, b'$'],
     SELECT_USERDEFINED_CHARACTER_SET => [ESC, b'%'],
     DEFINE_USERDEFINED_CHARACTER_SET => [ESC, b'&'],
+    CONTROL_BEEPER_TONES => [ESC, b'(', b'A'], //48->Beep the buzzer | 97-99->Model specific buzzer control 
+    SPECIFY_BATCH_PRINT => [ESC, b'(', b'Y'],
     SELECT_BITIMAGE_MODE => [ESC, b'*'],
     SWITCH_UNDERLINE_MODE => [ESC, b'-'],
     SELECT_DEFAULT_LINE_SPACING => [ESC, 2],
     SET_LINE_SPACING => [ESC, 3],
+    RETURN_HOME => [ESC, b'<'],
     SELECT_PEROPHERAL_DEVICE => [ESC, b'='],
     CANCEL_USER_DEFINED_CHARACTERS => [ESC, b'?'],
     INITIALIZE_PRINTER => [ESC, b'@'],
@@ -44,6 +50,18 @@ def_cmd! {
     SWITCH_EMPHASIZED_MODE => [ESC, b'E'],
     SWITCH_DOUBLESTRIKE_MODE => [ESC, b'G'],
     PRINT_AND_FEED_PAPER => [ESC, b'J'],
+    PRINT_AND_REVERSE_FEED => [ESC, b'K'],
+    SELECT_PAGE_MODE => [ESC, b'L'],
+    SLECT_CHARACTER_FONT => [ESC, b'M'],
+    SELECT_AN_INTERNATIONAL_CHARACTER_SET => [ESC, b'R'],
+    SELECT_STANDARD_MODE => [ESC, b'S'],
+    SELECT_PRINT_DIRECTION_IN_PAGE_MODE => [ESC, b'T'],
+    SWITCH_UNIDIRECTIONAL_PRINT_MODE => [ESC, b'U'],
+    SWITCH_90_CLOCKWISE_ROTATION_MODE => [ESC, b'V'],
+    SET_PRINT_AREA_IN_PAGE_MODE => [ESC, b'W'],
+    SET_RELATIVE_PRINT_POSITION => [ESC, b'\\'],
+    SELECT_JUSTIFICATION => [ESC, b'a'],
+    SELECT_PAPER_SENSOR_OUTPUT_PAPEREND_SIGNAL => [ESC, b'c', 3],
     EXECUTE_TEST_PRINT => [GS, b'(',b'A'],
     PAPER_CUT => [GS, 0x56]
 }
