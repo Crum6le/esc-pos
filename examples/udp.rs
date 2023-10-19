@@ -17,5 +17,5 @@ fn main() {
     let socket = UdpSocket::bind("0.0.0.0:3400").unwrap();
     socket.connect("172.28.0.50:4210").unwrap();
     let mut printer = Printer::new(UdpSocketWrapper(socket));
-    printer.paper_cut(0x00);
+    printer.paper_cut(0x41, 0x05);
 }
