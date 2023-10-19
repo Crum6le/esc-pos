@@ -27,11 +27,12 @@ impl<T: Write> Printer<T>{
             [0x02, 0x40]
         });
     }
-    pub fn paper_cut(&mut self, cut_mode: u8) {
+    pub fn paper_cut(&mut self, cut_mode: u8, vertical_motion: u8) {
         let _ = self.sink.write(gen_fixed_cmd! {
-            0x03,
+            0x04,
             PAPER_CUT,
-            [cut_mode]
+            [cut_mode],
+            [vertical_motion]
         });
         let _ = self.sink.flush();
     }
