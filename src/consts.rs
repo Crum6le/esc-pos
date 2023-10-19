@@ -25,7 +25,7 @@ def_cmd! { //Every Command has to be checked for Printer
     //DLE
     TRANSMIT_REALTTIME_STAUTS => [DLE, EOT],
     SEND_REALTIME_REQUEST => [DLE, ENQ],
-    GENERATE_PULSE => [DLE, DC4, 1],
+    GENERATE_PULSE_IN_REAL_TIME => [DLE, DC4, 1],
     EXECUTE_POWER_OFF => [DLE, DC4, 2],
     SOUND_BUZZER => [DLE, DC4, 3],
     TRANSMIT_SPECIFIED_STATUS => [DLE, DC4, 7],
@@ -43,7 +43,7 @@ def_cmd! { //Every Command has to be checked for Printer
                                                 //97-99->Model specific buzzer control 
     SPECIFY_BATCH_PRINT => [ESC, b'(', b'Y'],
     SELECT_BITIMAGE_MODE => [ESC, b'*'],
-    SWITCH_UNDERLINE_MODE => [ESC, b'-'],
+    TOGGLE_UNDERLINE_MODE => [ESC, b'-'],
     SELECT_DEFAULT_LINE_SPACING => [ESC, 2],
     SET_LINE_SPACING => [ESC, 3],
     RETURN_HOME => [ESC, b'<'],
@@ -51,8 +51,8 @@ def_cmd! { //Every Command has to be checked for Printer
     CANCEL_USER_DEFINED_CHARACTERS => [ESC, b'?'],
     INITIALIZE_PRINTER => [ESC, b'@'],
     SET_HORIZONTAL_TAB => [ESC, b'D'],
-    SWITCH_EMPHASIZED_MODE => [ESC, b'E'],
-    SWITCH_DOUBLESTRIKE_MODE => [ESC, b'G'],
+    TOGGLE_EMPHASIZED_MODE => [ESC, b'E'],
+    TOGGLE_DOUBLESTRIKE_MODE => [ESC, b'G'],
     PRINT_AND_FEED_PAPER => [ESC, b'J'],
     PRINT_AND_REVERSE_FEED => [ESC, b'K'],
     SELECT_PAGE_MODE => [ESC, b'L'],
@@ -60,14 +60,14 @@ def_cmd! { //Every Command has to be checked for Printer
     SELECT_AN_INTERNATIONAL_CHARACTER_SET => [ESC, b'R'],
     SELECT_STANDARD_MODE => [ESC, b'S'],
     SELECT_PRINT_DIRECTION_IN_PAGE_MODE => [ESC, b'T'],
-    SWITCH_UNIDIRECTIONAL_PRINT_MODE => [ESC, b'U'],
-    SWITCH_90_CLOCKWISE_ROTATION_MODE => [ESC, b'V'],
+    TOGGLE_UNIDIRECTIONAL_PRINT_MODE => [ESC, b'U'],
+    TOGGLE_90_CLOCKWISE_ROTATION_MODE => [ESC, b'V'],
     SET_PRINT_AREA_IN_PAGE_MODE => [ESC, b'W'],
     SET_RELATIVE_PRINT_POSITION => [ESC, b'\\'],
     SELECT_JUSTIFICATION => [ESC, b'a'],
     SELECT_PAPER_SENSOR_OUTPUT_PAPEREND_SIGNAL => [ESC, b'c', 3],
     SELECT_PAPER_SEONSOR_TO_STOP_PRINTIG => [ESC, b'c', 4],
-    SWITCH_PANEL_BUTTONS => [ESC, b'c', 5],
+    TOGGLE_PANEL_BUTTONS => [ESC, b'c', 5],
     PRINT_AND_FEED_LINES => [ESC, b'd'],
     PRINT_AND_REVERSE_FEED_LINES => [ESC, b'e'],
     PARTIAL_CUT_ONE_POINT => [ESC, b'i'],
@@ -77,7 +77,7 @@ def_cmd! { //Every Command has to be checked for Printer
     SELECT_CHARACTER_CODE_TABLE => [ESC, b't'],
     TRANSMIT_PERIPHERAL_DEVICE_STATUS => [ESC, b'u'],
     TRANSMIT_PAPER_SENSOR_STATUS => [ESC, b'v'],
-    SWITCH_UPSIDEDOWN_PRINT_MODE => [ESC, b'{'],
+    TOGGLE_UPSIDEDOWN_PRINT_MODE => [ESC, b'{'],
     //FS
     SELECT_PRINT_MODE_FOR_KANJI_CHARACTERS => [FS, b'!'],
     SELECT_KANJI_CHARACTER_MODE => [FS, b'&'],
@@ -97,14 +97,14 @@ def_cmd! { //Every Command has to be checked for Printer
                                                                         //66->Feed paper to the cutting position 
                                                                         //67-> Feed paper to the print starting position 
                                                                         //80->Paper layout error special margin setting
-    SWITCH_AUTOMATIC_STATUS_BACK_FOR_OPTIONAL_FUNCTIONS => [FS, b'(', b'e'],
-    SWITCH_UNDERLINE_MODE_FOR_KANJI_CHARACTERS => [FS, b'-'],
+    TOGGLE_AUTOMATIC_STATUS_BACK_FOR_OPTIONAL_FUNCTIONS => [FS, b'(', b'e'],
+    TOGGLE_UNDERLINE_MODE_FOR_KANJI_CHARACTERS => [FS, b'-'],
     CANCEL_KANJI_CHARACTER_MODE => [FS, b'.'],
     DEFINE_USERDEFINED_KANJI_CHARACTERS => [FS, 2],
     CANCEL_USER_DEFINED_KANJI_CHARACTERS => [FS, b'?'],
     SELECT_KANJI_CHARACTER_CODE_SYSTEM => [FS, b'C'],
     SET_KANJI_CHARACTER_SPACING => [FS, b'S'],
-    SWITCH_QUADRUPLESIZE_MODE_FOR_KANJI_CHARACTERS => [FS, b'W'],
+    TOGGLE_QUADRUPLESIZE_MODE_FOR_KANJI_CHARACTERS => [FS, b'W'],
     WRITE_TO_NV_USER_MEMORY => [FS, b'g', 1],
     READ_FROM_NV_USER_MEMORY => [FS, b'g', 2],
     PRINT_NV_BIT_IMAGE => [FS, b'p'],
@@ -119,11 +119,11 @@ def_cmd! { //Every Command has to be checked for Printer
                                             //3->Transmit the remaining cpacity of the NV user memory 
                                             //5->Transmit the key code list 
                                             //6->Delete all data in the NV user memory
-    SWITCH_REAL_TIME_COMMAND => [GS, b'(', b'D'],
+    TOGGLE_REAL_TIME_COMMAND => [GS, b'(', b'D'],
     SET_USER_SETUP_COMMANDS => [GS, b'(', b'E'],    //1->Change into the user setting mode 
                                                     //2->End the user setting mode session
-                                                    //3->Change the memory switch
-                                                    //4->Transmit the settings of the memory switch
+                                                    //3->Change the memory TOGGLE
+                                                    //4->Transmit the settings of the memory TOGGLE
                                                     //5->Set the customized settings values
                                                     //6->Transmit the customized setting values
                                                     //7->Copy the user defined page
@@ -172,6 +172,90 @@ def_cmd! { //Every Command has to be checked for Printer
                                                 //84->Define the download graphics data (Column format)
                                                 //112->Store the graphics data in the print buffer(raster format)
                                                 //113->Store the graphics data in the print buffer(column format)
-
-    PAPER_CUT => [GS, 0x56]
+    CUSTOMIZE_PRINTER_CONTROL_VALUES => [GS, b'(', b'M'],   //1->Save the setting values from the work area into the storage area
+                                                            //2->Load the setting values stored in the storage area to the work area
+                                                            //3->Select the setting values loaded to the work area after the initialization process
+    SELECT_CHARACTER_EFFECTS => [GS, b'(', b'N'],   //48->Select character color
+                                                    //49->Select background color
+                                                    //50->Turn shading mode on/off
+    PAGE_MODE_CONTROL => [GS, b'(', b'P'],  //48->Set the printable area in page mode
+    COMMANDS_FOR_DRAWING_GRAPHICS => [GS, b'(', b'Q'],  //48->Draw line
+                                                        //49->Draw rectangle
+    SPECIFY_PAPER_CUT => [GS, b'(',b'V'],   //48->Paper cut
+                                            //49->Paper feed and cut
+                                            //51->Paper cut reservation
+    SET_UP_AND_PRINT_THE_SYMBOL => [GS, b'(', b'k'],//65->PDF417: Set the number of clumns in the data region
+                                                    //66->PDF417: Set the number of rows
+                                                    //67->PDF417: Set the width of the module
+                                                    //68->PDF417: Set the row height
+                                                    //69->PDF417: Set the error correction level
+                                                    //70->PDF417: Select the options
+                                                    //80->PDF417: Store the data in the symbol storage area
+                                                    //81->PDF417: Print the symbol data in the symbol storage area
+                                                    //82->PDF417: Transmit the size information of the symbol data in the symbol storage area
+                                                    //165->QR Code: Select the model
+                                                    //167->QR Code: Set the size of module 
+                                                    //169->QR Code: Select the error correction level
+                                                    //180->QR Code: Store the data in the yambol storage
+                                                    //181->QR Code: Print the symbol data in the symbol storage
+                                                    //182->QR Code: Transmit the size information of the symbol storage area
+                                                    //265->MaxiCode: Select the mode
+                                                    //280->MaxiCode: Store the data in the symbol storage area
+                                                    //281->MaxiCode: Print the symbol data in the symbol storage
+                                                    //282->MaxiCode: Transmit the size information of the symbol data in the symbol storage area
+                                                    //367->Data-Bar: Set the width of the module
+                                                    //371->Data-Bar: GS1 DataBar Expanded Stacked maximum width setting
+                                                    //380->Data-Bar: Store data in the symbol storage area
+                                                    //381->Data-Bar: Print the symbol data in the symbol storage area
+                                                    //382->Data-Bar: Transmit the size information of the symbol data in the symbol storage area
+                                                    //467->Composite Symbology: Set the width of the module
+                                                    //471->Composite Symbology: GS1 DataBar Expanded Stacked maximum width setting
+                                                    //472->Composite Symbology: Select HRI character font
+                                                    //480->Composite Symbology: Store the data in the symbol storage area
+                                                    //481->Composite Symbology: Print the symbol data in the symbol storage area
+                                                    //482->Composite Symbology: Transmit the size information of the symbol storage area
+                                                    //566->Aztec Code: Set the number of mode types and data layers
+                                                    //567->Aztec Code: Set the size of the module
+                                                    //569->Aztec Code: Set the error correction level
+                                                    //580->Aztec Code: Store the data in the symbol area
+                                                    //581->Aztec Code: Print the symbol data in the symbol storage
+                                                    //582->Aztec Code: Transmit the size information of the symbol data in the symbol storage area
+                                                    //666->DataMatrix: Set the symbol tybe, number of columns, number of rows
+                                                    //667->DataMatrix: Set the size of the module
+                                                    //680->DataMatrix: Store the data in the symbol storage area
+                                                    //681->DataMatrix: Print the symbol data in the symbol storage area
+                                                    //682->DataMatrix: Transmit the size information of the symbol data in the symbol storage area
+    DEFINE_DOWNLOADED_BITIMAGE => [GS, b'*'],
+    PRINT_DOWNLOADED_BITIMAGE => [GS, b'/'],
+    TOGGLE_MACRO_RECORDING => [GS, b':'],
+    TOGGLE_INVERSE_PRINT_MODE => [GS, b'B'],
+    SELECT_COUNTER_PRINT_MODE => [GS, b'C', 0x30],
+    SELECT_COUNT_MODE_A => [GS, b'C', 0x31],
+    SET_COUNTER => [GS, b'C', 0x32],
+    SELECT_COUNT_MODE_B => [GS, b'C', b';'],
+    SPECIFY_WIN_BMP_GRAPHICS_DATA => [GS, b'D'],    //67->Define Windows BMP NV graphics data
+                                                    //83->Define Windows BMP downloaded graphics data
+    SELECT_PRINT_POSITION_OF_HRI_CHARACTERS => [GS, b'H'],
+    TRANSMIT_PRINTER_ID => [GS, b'I'],
+    SET_LEFT_MARGIN => [GS, b'L'],
+    SET_HORIZONTAL_AND_VERTICAL_MOTION_UNITS => [GS, b'P'],
+    PRINT_VARIABLE_VERTICAL_SIZE_BIT_IMAGE => [GS, b'Q', 0x30],
+    SET_PRINT_POSITION_TO_THE_BEGINING_OF_PRINT_LINE => [GS, b'T'],
+    SELECT_PAPER_CUT_MODE_AND_CUT => [GS, b'V'],
+    SET_PRINT_AREA_WIDTH => [GS, b'W'],
+    SET_RELATIVE_VERTICAL_PRINT_POSITION_IN_PAGEMODE => [GS, b'\\'],
+    EXECUTE_MACRO => [GS, b'^'],
+    TOGGLE_AUTOMATIC_STATUS_BACK => [GS, b'a'],
+    TOGGLE_SMOOTHING_MODE => [GS, b'b'],
+    PRINT_COUNTER => [GS, b'c'],
+    SELECT_FONT_FOR_HRI_CHARACTERS => [GS, b'f'],
+    INITIALIZE_MAINTENANCE_COUNTER => [GS, b'g', 0x30],
+    TRANSMIT_MAINTENANCE_COUNTER => [GS, b'g', 0x32],
+    SET_BARCODE_HEIGHT => [GS, b'h'],
+    TOGGLE_AUTOMATIC_STATUS_BACK_FOR_INC => [GS, b'j'],
+    PRINT_BARCODE => [GS, b'k'],
+    TRANSMIT_STATUS => [GS, b'r'],
+    PRINT_RASTER_BIT_IMAGE => [GS, b'v', 0x30],
+    SET_BARCODE_WIDTH => [GS, b'w'],
+    SET_ONLINE_RECOVERY_WAIT_TIME => [GS, b'z', 0x30]
 }
