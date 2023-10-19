@@ -88,7 +88,19 @@ def_cmd! { //Every Command has to be checked for Printer
     SWITCH_UNDERLINE_MODE_FOR_KANJI_CHARACTERS => [FS, b'-'],
     CANCEL_KANJI_CHARACTER_MODE => [FS, b'.'],
     DEFINE_USERDEFINED_KANJI_CHARACTERS => [FS, 2],
-
+    SELECT_KANJI_CHARACTER_CODE_SYSTEM => [FS, b'C'],
+    SET_KANJI_CHARACTER_SPACING => [FS, b'S'],
+    SWITCH_QUADRUPLESIZE_MODE_FOR_KANJI_CHARACTERS => [FS, b'W'],
+    WRITE_TO_NV_USER_MEMORY => [FS, b'g', 1],
+    READ_FROM_NV_USER_MEMORY => [FS, b'g', 2],
+    PRINT_NV_BIT_IMAGE => [FS, b'p'],
+    DEFINE_NV_BIT_IMAGE => [FS, b'q'],
+    //GS
+    SELECT_CHARACTER_SIZE => [GS, b'!'],
+    SET_ABSOLUTE_VERTICAL_PRINT_POSITION_IN_PAGE_MODE => [GS, b'$'],
     EXECUTE_TEST_PRINT => [GS, b'(',b'A'],
+    SWITCH_REAL_TIME_COMMAND => [GS, b'(', b'D'],
+    SET_USER_SETUP_COMMANDS => [GS, b'(', b'E'], 
+
     PAPER_CUT => [GS, 0x56]
 }
