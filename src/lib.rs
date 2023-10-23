@@ -7,7 +7,7 @@ pub mod consts;
 #[macro_use]
 mod macros;
 
-use type_state::{T88IV, T88V};
+use type_state::*;
 
 use crate::consts::*;
 
@@ -63,10 +63,16 @@ impl<T: Write, Model> Printer<T, Model> {
     }*/
 }
 
-impl<T: Write> Printer<T, T88IV> {
+impl Color for TMT88IV{}
+
+impl<T: Write, Model:Color> Printer<T, Model> {
+    
+}
+
+impl<T: Write> Printer<T, TMT88IV> {
 
 }
 
-impl<T: Write> Printer<T, T88V> {
+impl<T: Write> Printer<T, TMT88V> {
     
 }
