@@ -42,3 +42,13 @@ macro_rules! gen_fixed_cmd {
         }
     };
 }
+#[macro_export]
+macro_rules! impl_trait {
+    (
+        $traitname:ident,
+        $structname:ident
+        
+    ) => {
+        impl $traitname for $structname {}
+    };
+}

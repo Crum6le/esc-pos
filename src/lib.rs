@@ -26,8 +26,19 @@ impl<T: Write, Model> Printer<T, Model> {
         }
     }
 
+    pub fn horizontal_tab(&mut self){
+        let _ = self.sink.write(HORIZONTAL_TAB.as_slice());
+        let _ = self.sink.flush();
+    }
 
+    pub fn line_feed(&mut self) {
+        let _ = self.sink.write(LINE_FEED.as_slice());
+        let _ = self.sink.flush();    
+    }
 
+    pub fn transmit_real_time_status(&mut self, funcmode: u8, secfuncmode: Option<u8>) -> u8{
+        0x00
+    }//TODO
     //-------------
 
     pub fn test_print(&mut self) {
@@ -54,19 +65,36 @@ impl<T: Write, Model> Printer<T, Model> {
         let _ = self.sink.flush();
     }
 
-    pub fn line_feed(&mut self) {
-        let _ = self.sink.write(LINE_FEED.as_slice());
-    }
-
     /*pub fn print(&mut self, string: &str) {
         let _ = self.sink.write(string.as_bytes());
     }*/
 }
 
-impl Color for TMT88IV{}
+impl FFinPageMode for (EUM30, TMJ2000, TML90, TML90LFC, TML100, TMm10, TMm30, TMm30II, TMm30IIH, TMm30IINT, TMm30IIS, TMm30IISL, TMm30III, TMm30IIIH, TMm50, TMm50II, TMm50IIH, TMP20, TMP20II, TMP60, TMP60II, TMP80, TMP80II, TMT100, TMT20, TMT20II, TMT20III, TMT20IIIL, TMT20X, TMT70, TMT70II, TMT81III, TMT82II, TMT82III, TMT82IIIL, TMT82X, TMT83III, TMT88IV, TMT88V, TMT88VI, TMT88VII, TMT90){}
 
-impl<T: Write, Model:Color> Printer<T, Model> {
-    
+impl<T: Write, Model:FFinPageMode> Printer<T, Model> {
+    pub fn print_and_return_mode(&mut self){ //works in page mode
+        let _ = self.sink.write(PRINT_AND_RETURN_TO_STANDARD_MODE.as_slice());
+        let _ = self.sink.flush();
+    }
+}
+
+impl FFinStandardMode for (EUM30, TML100, TMm30, TMm30II, TMm30IIH, TMm30IINT, TMm30IIS, TMm30IISL, TMm30III, TMm30IIIH, TMm50, TMm50II, TMm50IIH, TMP20II, TMP80II){}
+
+impl <T: Write, Model:FFinStandardMode> Printer<T, Model> {
+    pub fn end_job(&mut self){
+        let _ = self.sink.write(END_JOB.as_slice());
+        let _ = self.sink.flush();
+    }
+}
+
+impl PrintAndReturnCarriage for (EUM30, TMJ2000, TML90, TML90LFC, TML100, TMm10, TMm30, TMm30II, TMm30IIH, TMm30IINT, TMm30IIS, TMm30IISL, TMm30III, TMm30IIIH, TMm50, TMm50II, TMm50IIH, TMT100, TMT20, TMT20II, TMT20III, TMT20IIIL, TMT20X, TMT70, TMT70II, TMT81III, TMT82II, TMT82III, TMT82IIIL, TMT82X, TMT83III, TMT88IV, TMT88V, TMT88VI, TMT88VII, TMT90, TMU220, TMU230){}
+
+impl<T: Write, Model:PrintAndReturnCarriage> Printer<T, Model> {
+    pub fn print_and_return_carriage(&mut self){
+        let _ = self.sink.write(PRINT_AND_CARRIAGE_RETURN.as_slice());
+        let _ = self.sink.flush();
+    }
 }
 
 impl<T: Write> Printer<T, TMT88IV> {
@@ -76,3 +104,5 @@ impl<T: Write> Printer<T, TMT88IV> {
 impl<T: Write> Printer<T, TMT88V> {
     
 }
+
+//EUM30, TMJ2000, TML90, TML90LFC, TML100, TMm10, TMm30, TMm30II, TMm30IIH, TMm30IINT, TMm30IIS, TMm30IISL, TMm30III, TMm30IIIH, TMm50, TMm50II, TMm50IIH, TMP20, TMP20II, TMP60, TMP60II, TMP80, TMP80II, TMT100, TMT20, TMT20II, TMT20III, TMT20IIIL, TMT20X, TMT70, TMT70II, TMT81III, TMT82II, TMT82III, TMT82IIIL, TMT82X, TMT83III, TMT88IV, TMT88V, TMT88VI, TMT88VII, TMT90, TMU220, TMU230

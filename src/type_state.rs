@@ -1,4 +1,6 @@
-pub trait Color{}
+pub trait FFinPageMode{}
+pub trait FFinStandardMode{}
+pub trait PrintAndReturnCarriage{}
 
 pub struct EUM30;
 pub struct TMJ2000;
