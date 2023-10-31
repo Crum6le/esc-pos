@@ -39,6 +39,14 @@ impl<T: Write, Model> Printer<T, Model> {
     pub fn transmit_real_time_status(&mut self, funcmode: u8, secfuncmode: Option<u8>) -> u8{
         0x00
     }//TODO
+
+    pub fn send_realtime_request(&mut self, funcmode: u8) {
+        let _ = self.sink.write(gen_fixed_cmd! {
+            0x03,
+            SEND_REALTIME_REQUEST,
+            [funcmode]
+        });
+    }
     //-------------
 
     pub fn test_print(&mut self) {
@@ -94,6 +102,18 @@ impl<T: Write, Model:PrintAndReturnCarriage> Printer<T, Model> {
     pub fn print_and_return_carriage(&mut self){
         let _ = self.sink.write(PRINT_AND_CARRIAGE_RETURN.as_slice());
         let _ = self.sink.flush();
+    }
+}
+
+impl GeneratePulseInRealTime for (EUM30, TMJ2000, TML90, TML90LFC, TML100, TMm10, TMm30, TMm30II, TMm30IIH, TMm30IINT, TMm30IIS, TMm30IISL, TMm30III, TMm30IIIH, TMm50, TMm50II, TMm50IIH, TMT100, TMT20, TMT20II, TMT20III, TMT20IIIL, TMT20X, TMT70, TMT70II, TMT81III, TMT82II, TMT82III, TMT82IIIL, TMT82X, TMT83III, TMT88IV, TMT88V, TMT88VI, TMT88VII, TMT90, TMU220){}
+
+impl<T: Write, Model:GeneratePulseInRealTime> Printer<T, Model> {
+    pub fn generate_pulse_in_realtime(&mut self, connectorPin: u8, time: u8) {
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x05,
+            GENERATE_PULSE_IN_REAL_TIME,
+            [connectorPin, time]
+        });
     }
 }
 
