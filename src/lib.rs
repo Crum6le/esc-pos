@@ -85,6 +85,30 @@ impl<T: Write, Model:FFinPageMode> Printer<T, Model> {
         let _ = self.sink.write(PRINT_AND_RETURN_TO_STANDARD_MODE.as_slice());
         let _ = self.sink.flush();
     }
+
+    pub fn execute_power_off_sequence(&mut self) {
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x05,
+            EXECUTE_POWER_OFF,
+            [0x01, 0x08]
+        });
+    }
+
+    pub fn clear_buffer(&mut self) {
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x0a,
+            CLEAR_BUFFER,
+            [0x01, 0x03, 0x14, 0x01, 0x06, 0x02, 0x08]
+        });
+    }
+
+    pub fn cancel_print_data(&mut self) {
+        let _ = self.sink.write([CAN].as_slice());
+    }
+
+    pub fn print_data_in_pagemode(&mut self) {
+        let _ = self.sink.write(PRINT_DATA_IN_PAGEMODE.as_slice());
+    }
 }
 
 impl FFinStandardMode for (EUM30, TML100, TMm30, TMm30II, TMm30IIH, TMm30IINT, TMm30IIS, TMm30IISL, TMm30III, TMm30IIIH, TMm50, TMm50II, TMm50IIH, TMP20II, TMP80II){}
@@ -113,6 +137,30 @@ impl<T: Write, Model:GeneratePulseInRealTime> Printer<T, Model> {
             0x05,
             GENERATE_PULSE_IN_REAL_TIME,
             [connectorPin, time]
+        });
+    }
+}
+
+impl SoundBuzzerInRealTime for (EUM30, TML100, TMm10, TMm30, TMm30II,  TMm30IIH, TMm30IINT, TMm30IIS, TMm30IISL, TMm30III, TMm30IIIH, TMm50, TMm50II, TMm50IIH, TMT20, TMT20II, TMT20III, TMT20IIIL, TMT20X, TMT70II, TMT81III, TMT82II, TMT82III, TMT82IIIL, TMT82X, TMT83III, TMT88V, TMT88VI, TMT88VII) {}
+
+impl <T: Write, Model:SoundBuzzerInRealTime> Printer<T, Model> {
+    pub fn sound_buzzer_in_realtime(&mut self, soundpattern: u8, n: u8, times: u8, t1: u8, t2: u8){ //TODO change parameters to better names
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x08,
+            SOUND_BUZZER,
+            [soundpattern, n, times, t1, t2]
+        });
+    }
+}
+
+impl TransmitSpecifiedStatusInRealtime for (EUM30, TML100, TMm10, TMm30, TMm30II, TMm30IIH, TMm30IINT, TMm30IIS, TMm30IISL, TMm30III, TMm30IIIH, TMm50, TMm50II, TMm50IIH, TMP20, TMP20II, TMP60, TMP60II, TMP80, TMP80II, TMT20IIIL, TMT20X, TMT81III, TMT82IIIL, TMT82X, TMT83III, TMT100) {}
+
+impl <T: Write, Model:TransmitSpecifiedStatusInRealtime> Printer<T, Model> {
+    pub fn transmit_specified_status(&mut self, function: u8){
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x04,
+            TRANSMIT_SPECIFIED_STATUS,
+            [function]
         });
     }
 }
