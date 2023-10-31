@@ -46,9 +46,12 @@ macro_rules! gen_fixed_cmd {
 macro_rules! impl_trait {
     (
         $traitname:ident,
-        $structname:ident
+        [$(
+            $structname:ident
+        ),+]
         
     ) => {
-        impl $traitname for $structname {}
+        $(impl $traitname for $structname {})+
     };
 }
+
