@@ -4,9 +4,14 @@ pub trait PrintAndReturnCarriage{}
 pub trait GeneratePulseInRealTime{}
 pub trait SoundBuzzerInRealTime{}
 pub trait TransmitSpecifiedStatusInRealtime{}
+pub trait SelectPrintMode{}
+pub trait SelectUserDefinedCharacterSet{}
+pub trait BeepTheBuzzer{}
+pub trait ModelSpecificBuzzerControl{}
 
 pub struct EUM30;
 pub struct TMJ2000;
+pub struct TMJ2100;
 pub struct TML90;
 pub struct TML90LFC;
 pub struct TML100;
