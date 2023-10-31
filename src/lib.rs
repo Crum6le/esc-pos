@@ -46,6 +46,7 @@ impl<T: Write, Model> Printer<T, Model> {
             SEND_REALTIME_REQUEST,
             [funcmode]
         });
+        let _ = self.sink.flush();
     }
 
     pub fn set_rightSide_character_spacing(&mut self, spacing: u8) {
@@ -54,6 +55,7 @@ impl<T: Write, Model> Printer<T, Model> {
             SET_RIGHT_SIDE_CHARACTER_SPACING,
             [spacing]    
         });
+        let _ = self.sink.flush();
     }
 
     //-------------
@@ -65,6 +67,7 @@ impl<T: Write, Model> Printer<T, Model> {
             2u16.to_le_bytes(),
             [0x02, 0x40]
         });
+        let _ = self.sink.flush();
     }
 
     pub fn paper_cut(&mut self, cut_mode: u8, vertical_motion: Option<u8>) {
@@ -101,6 +104,7 @@ impl<T: Write, Model:FFinPageMode> Printer<T, Model> {
             EXECUTE_POWER_OFF,
             [0x01, 0x08]
         });
+        let _ = self.sink.flush();
     }
 
     pub fn clear_buffer(&mut self) {
@@ -109,14 +113,17 @@ impl<T: Write, Model:FFinPageMode> Printer<T, Model> {
             CLEAR_BUFFER,
             [0x01, 0x03, 0x14, 0x01, 0x06, 0x02, 0x08]
         });
+        let _ = self.sink.flush();
     }
 
     pub fn cancel_print_data(&mut self) {
         let _ = self.sink.write([CAN].as_slice());
+        let _ = self.sink.flush();
     }
 
     pub fn print_data_in_pagemode(&mut self) {
         let _ = self.sink.write(PRINT_DATA_IN_PAGEMODE.as_slice());
+        let _ = self.sink.flush();
     }
 
     pub fn set_absolute_print_position(&mut self, position: u16) {
@@ -125,6 +132,7 @@ impl<T: Write, Model:FFinPageMode> Printer<T, Model> {
             SET_ABSOLUTE_PRINT_POSITION,
             position.to_le_bytes()
         });
+        let _ = self.sink.flush();
     }
 }
 
@@ -155,6 +163,7 @@ impl<T: Write, Model:GeneratePulseInRealTime> Printer<T, Model> {
             GENERATE_PULSE_IN_REAL_TIME,
             [connectorPin, time]
         });
+        let _ = self.sink.flush();
     }
 }
 
@@ -167,6 +176,7 @@ impl <T: Write, Model:SoundBuzzerInRealTime> Printer<T, Model> {
             SOUND_BUZZER,
             [soundpattern, n, times, t1, t2]
         });
+        let _ = self.sink.flush();
     }
 }
 
@@ -179,6 +189,7 @@ impl <T: Write, Model:TransmitSpecifiedStatusInRealtime> Printer<T, Model> {
             TRANSMIT_SPECIFIED_STATUS,
             [function]
         });
+        let _ = self.sink.flush();
     }
 }
 
@@ -191,6 +202,7 @@ impl <T: Write, Model:SelectPrintMode> Printer<T, Model> {
             SELECT_PRINT_MODE,
             [mode]
         });
+        let _ = self.sink.flush();
     }
 }
 
@@ -203,6 +215,7 @@ impl <T: Write, Model:SelectUserDefinedCharacterSet> Printer<T, Model> {
             SELECT_USERDEFINED_CHARACTER_SET,
             [mode]
         });
+        let _ = self.sink.flush();
     }
 
     pub fn define_userdefined_characters(&mut self){
@@ -219,6 +232,7 @@ impl <T: Write, Model:BeepTheBuzzer> Printer<T, Model> {
             CONTROL_BEEPER_TONES,
             [0x04, 0x00, 0x30, soundType, beepCounts, cycle]
         });
+        let _ = self.sink.flush();
     }
 }
 
@@ -231,6 +245,7 @@ impl <T: Write, Model:ModelSpecificBuzzerControl> Printer<T, Model> {
             CONTROL_BEEPER_TONES,
             [0x03, 0x00, 0x61, pattern, time]
         });
+        let _ = self.sink.flush();
     }
 }
 
@@ -241,6 +256,7 @@ impl<T: Write> Printer<T, TMU230> {
             CONTROL_BEEPER_TONES,
             [0x05, 0x00, 0x61, 0x64, count, on_time, off_time]
         });
+        let _ = self.sink.flush();
     }
 }
 
