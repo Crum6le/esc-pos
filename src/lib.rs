@@ -265,7 +265,30 @@ impl<T: Write> Printer<T, TMU230> {
             CONTROL_BEEPER_TONES,
             [0x07, 0x00, 0x62, factor, 0x01, 0x64, beep_type, on_time, off_time]
         });
+        let _ = self.sink.flush(); 
     } 
+
+    pub fn beep_the_internal_buzzer_when_not_offline(&mut self, beep_type: u8, on_time: u8, off_time: u8){
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x0c,
+            CONTROL_BEEPER_TONES,
+            [0x07, 0x00, 0x63, 0x30, 0x01, 0x64, beep_type, on_time, off_time]
+        });
+        let _ = self.sink.flush(); 
+    }
+}
+
+impl_trait!(SpecifyBatchPrint, [EUM30, TML100, TMm30II, TMm30IIH, TMm30III, TMm30IIIH, TMm30IINT, TMm30IIS, TMm30IISL, TMm50, TMm50II, TMm50IIH, TMP20II, TMP80, TMT88VII]);
+
+impl<T: Write, Model: SpecifyBatchPrint> Printer<T, Model>{
+    pub fn specify_batch_print(&mut self, mode: u8, direction: u8){
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x07,
+            SPECIFY_BATCH_PRINT,
+            [0x02, 0x00, mode, direction]
+        });
+        let _ = self.sink.flush(); 
+    }
 }
 
 impl<T: Write> Printer<T, TMT88IV> {
