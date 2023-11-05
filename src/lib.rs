@@ -239,7 +239,7 @@ impl <T: Write, Model:BeepTheBuzzer> Printer<T, Model> {
 impl_trait!(ModelSpecificBuzzerControl, [EUM30, TML100, TMm10, TMm30, TMm30II, TMm30IIH, TMm30III, TMm30IIIH, TMm30IINT, TMm30IIS, TMm30IISL, TMm50, TMm50II, TMm50IIH, TMT20, TMT20II, TMT20III, TMT20IIIL, TMT20X, TMT70II, TMT81III, TMT82II, TMT82III, TMT82IIIL, TMT82X, TMT83III, TMT88V, TMT88VI, TMT88VII, TMT100]);
 
 impl <T: Write, Model:ModelSpecificBuzzerControl> Printer<T, Model> {
-    pub fn model_specific_buzzer_control(&mut self, pattern: u8, time: u8){
+    pub fn control_buzzer(&mut self, pattern: u8, time: u8){
         let _ = self.sink.write(gen_fixed_cmd!{
             0x08,
             CONTROL_BEEPER_TONES,
@@ -250,7 +250,7 @@ impl <T: Write, Model:ModelSpecificBuzzerControl> Printer<T, Model> {
 }
 
 impl<T: Write> Printer<T, TMU230> {
-    pub fn model_specific_buzzer_control(&mut self, count: u8, on_time: u8, off_time: u8) {
+    pub fn beep_the_internal_buzzer(&mut self, count: u8, on_time: u8, off_time: u8) {
         let _ = self.sink.write(gen_fixed_cmd!{
             0x0a,
             CONTROL_BEEPER_TONES,
@@ -258,6 +258,14 @@ impl<T: Write> Printer<T, TMU230> {
         });
         let _ = self.sink.flush();
     }
+    
+    pub fn beep_the_internal_buzzer_when_offline(&mut self, factor: u8, beep_type: u8, on_time: u8, off_time: u8) {
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x0c,
+            CONTROL_BEEPER_TONES,
+            [0x07, 0x00, 0x62, factor, 0x01, 0x64, beep_type, on_time, off_time]
+        });
+    } 
 }
 
 impl<T: Write> Printer<T, TMT88IV> {
