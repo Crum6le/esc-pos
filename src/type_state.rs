@@ -9,6 +9,7 @@ pub trait SelectUserDefinedCharacterSet{}
 pub trait BeepTheBuzzer{}
 pub trait ModelSpecificBuzzerControl{}
 pub trait SpecifyBatchPrint{}
+pub trait SelectBitImageMode{}
 
 pub struct EUM30;
 pub struct TMJ2000;

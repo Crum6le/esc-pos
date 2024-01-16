@@ -291,6 +291,14 @@ impl<T: Write, Model: SpecifyBatchPrint> Printer<T, Model>{
     }
 }
 
+impl_trait!(SelectBitImageMode, [EUM30, TMJ2000, TMJ2100, TML90, TML90LFC, TML100, TMm10, TMm30, TMm30II, TMm30IIH, TMm30IINT, TMm30IIS, TMm30IISL, TMm30III, TMm30IIIH, TMm50, TMm50II, TMm50IIH, TMP20, TMP20II, TMP80, TMP80II, TMT100, TMT20, TMT20II, TMT20III, TMT20IIIL, TMT20X, TMT70, TMT70II, TMT81III, TMT82II, TMT82III, TMT82IIIL, TMT82X, TMT83III, TMT88IV, TMT88V, TMT88VI, TMT88VII, TMT90, TMT100, TMU220, TMU230]);
+
+impl<T: Write, Model: SelectBitImageMode> Printer<T, Model>{
+    pub fn select_bitimage_mode(&mut self, mode: u8){
+        //TODO finish this command
+    }
+}
+
 impl<T: Write> Printer<T, TMT88IV> {
 
 }
