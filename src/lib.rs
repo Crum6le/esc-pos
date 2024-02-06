@@ -218,7 +218,7 @@ impl <T: Write, Model:SelectUserDefinedCharacterSet> Printer<T, Model> {
         let _ = self.sink.flush();
     }
 
-    pub fn define_userdefined_characters(&mut self){
+    pub fn define_userdefined_characters(&mut self, data: &[&[u8]]){
         //TODO this function
     }
 }
