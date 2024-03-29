@@ -1,15 +1,20 @@
-pub trait FFinPageMode{}
-pub trait FFinStandardMode{}
-pub trait PrintAndReturnCarriage{}
-pub trait GeneratePulseInRealTime{}
-pub trait SoundBuzzerInRealTime{}
-pub trait TransmitSpecifiedStatusInRealtime{}
-pub trait SelectPrintMode{}
-pub trait SelectUserDefinedCharacterSet{}
-pub trait BeepTheBuzzer{}
-pub trait ModelSpecificBuzzerControl{}
-pub trait SpecifyBatchPrint{}
-pub trait SelectBitImageMode{}
+pub trait FFinPageMode {}
+pub trait FFinStandardMode {}
+pub trait PrintAndReturnCarriage {}
+pub trait GeneratePulseInRealTime {}
+pub trait SoundBuzzerInRealTime {}
+pub trait TransmitSpecifiedStatusInRealtime {}
+pub trait SelectPrintMode {}
+pub trait SelectUserDefinedCharacterSet {
+    const X: u8;
+    const Y: u8;
+}
+pub trait BeepTheBuzzer {}
+pub trait ModelSpecificBuzzerControl {}
+pub trait SpecifyBatchPrint {}
+pub trait SelectBitImageMode {}
+pub trait SelectDefaultLineSpacing {}
+pub trait ReturnHome {}
 
 pub struct EUM30;
 pub struct TMJ2000;

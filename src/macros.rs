@@ -1,3 +1,5 @@
+use crate::type_state::{BeepTheBuzzer, SelectUserDefinedCharacterSet};
+
 #[macro_export]
 macro_rules! def_const_bytes {
     (
@@ -38,7 +40,7 @@ macro_rules! gen_fixed_cmd {
                 let chain = chain.chain($item);
             )*
             let mut chain = chain;
-            chain.next_chunk::<$len>().unwrap().as_slice()
+            chain.collect::<Vec<_>>().as_slice()
         }
     };
 }
@@ -49,9 +51,43 @@ macro_rules! impl_trait {
         [$(
             $structname:ident
         ),+]
-        
+
     ) => {
         $(impl $traitname for $structname {})+
     };
 }
-
+macro_rules! define_printer {
+    (
+        printer_name: $printer_name:ident,
+        $(
+            select_userdefined_character_set: {
+                x: $x:expr,
+                y: $y:expr
+            },
+        )?
+        ext_traits: [$(
+            $ext_trait: ident
+        ),*]
+    ) => {
+        pub struct $printer_name;
+        $(
+            impl SelectUserDefinedCharacterSet for $printer_name {
+                const X: u8 = $x;
+                const Y: u8 = $y;
+            }
+        )?
+        $(
+            impl $ext_trait for $printer_name {}
+        ),*
+    };
+}
+define_printer!(
+    printer_name: EUM30L,
+    select_userdefined_character_set: {
+        x: 3,
+        y: 12
+    },
+    ext_traits: [
+        
+    ]
+);

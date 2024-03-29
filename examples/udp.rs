@@ -1,6 +1,9 @@
-use std::{net::UdpSocket, io::{Write, Result}};
+use std::{
+    io::{Result, Write},
+    net::UdpSocket,
+};
 
-use esc_pos::{Printer, type_state::TMT88IV};
+use esc_pos::{type_state::TMT88IV, Printer};
 
 struct UdpSocketWrapper(UdpSocket);
 
@@ -17,7 +20,6 @@ fn main() {
     let socket = UdpSocket::bind("0.0.0.0:3400").unwrap();
     socket.connect("172.28.0.50:4210").unwrap();
     let mut printer = Printer::new(UdpSocketWrapper(socket), TMT88IV);
-    
-    
+
     printer.paper_cut(0x41, Some(0x05));
 }
