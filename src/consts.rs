@@ -56,7 +56,7 @@ def_cmd! { //Every Command has to be checked for Printer
     PRINT_AND_FEED_PAPER => [ESC, b'J'],
     PRINT_AND_REVERSE_FEED => [ESC, b'K'],
     SELECT_PAGE_MODE => [ESC, b'L'],
-    SLECT_CHARACTER_FONT => [ESC, b'M'],
+    SELECT_CHARACTER_FONT => [ESC, b'M'],
     SELECT_AN_INTERNATIONAL_CHARACTER_SET => [ESC, b'R'],
     SELECT_STANDARD_MODE => [ESC, b'S'],
     SELECT_PRINT_DIRECTION_IN_PAGE_MODE => [ESC, b'T'],

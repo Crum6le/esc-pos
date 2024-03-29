@@ -1,5 +1,4 @@
 #![feature(iter_next_chunk)]
-use core::slice::SlicePattern;
 use std::{io::Write, marker::PhantomData};
 
 pub mod type_state;
@@ -114,6 +113,48 @@ impl<T: Write, Model> Printer<T, Model> {
             0x03,
             SELECT_PERIPHERAL_DEVICE,
             [data]
+        });
+        let _ = self.sink.flush();
+    }
+
+    pub fn initialize_printer(&mut self){
+        let _ = self.sink.write(INITIALIZE_PRINTER.as_slice());
+        let _ = self.sink.flush();
+    }
+
+    pub fn set_horizontal_tab(&mut self, data: &[u8]){
+        let length = data.len()+3;
+        let _ = self.sink.write(gen_fixed_cmd!{
+            length,
+            SET_HORIZONTAL_TAB,
+            [0x00]
+        });
+        let _ = self.sink.flush();
+    }
+
+    pub fn emphasized_mode(&mut self, state: u8) {
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x03,
+            TOGGLE_EMPHASIZED_MODE,
+            [state]
+        });
+        let _ = self.sink.flush();
+    }
+
+    pub fn print_and_feed_paper(&mut self, amount: u8) {
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x03,
+            PRINT_AND_FEED_PAPER,
+            [amount]
+        });
+        let _ = self.sink.flush();
+    }
+
+    pub fn select_international_character_set(&mut self, character_set: u8) {
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x03,
+            SELECT_AN_INTERNATIONAL_CHARACTER_SET,
+            [character_set]
         });
         let _ = self.sink.flush();
     }
@@ -235,7 +276,7 @@ impl<T: Write, Model: SelectUserDefinedCharacterSet> Printer<T, Model> {
         let _ = self.sink.flush();
     }
 
-    pub fn define_userdefined_characters(&mut self, data: &[&[u8]], firstCharacterCode: u8, finalCharacterCode: u8) {
+   /* pub fn define_userdefined_characters(&mut self, data: &[&[u8]], firstCharacterCode: u8, finalCharacterCode: u8) {
         let length = data.len()+0x05; 
         let _ = self.sink.write(gen_fixed_cmd! {
             length,
@@ -244,7 +285,7 @@ impl<T: Write, Model: SelectUserDefinedCharacterSet> Printer<T, Model> {
             data
         });
         let _ = self.sink.flush();
-    }
+    }*/
 }
 
 impl<T: Write, Model: BeepTheBuzzer> Printer<T, Model> {
@@ -343,6 +384,62 @@ impl<T:Write, Model: SelectDefaultLineSpacing> Printer<T, Model> {
 impl<T:Write, Model: ReturnHome> Printer<T, Model> {
     pub fn return_home(&mut self) {
         let _ = self.sink.write(RETURN_HOME.as_slice());
+        let _ = self.sink.flush();
+    }
+}
+
+impl<T:Write, Model: CancelUserDefinedCharacters> Printer<T, Model> {
+    pub fn cancel_user_defined_characters(&mut self, character_code: u8){
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x03,
+            CANCEL_USER_DEFINED_CHARACTERS,
+            [character_code]
+        });
+        let _ = self.sink.flush();
+    } 
+}
+
+impl<T:Write, Model: ToggleDoubleStrikeMode> Printer<T, Model> {
+    pub fn toggle_doublestrike_mode(&mut self, state: u8){
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x03,
+            TOGGLE_DOUBLESTRIKE_MODE,
+            [state]
+        });
+    }
+}
+
+impl<T:Write, Model: PrintAndReverseFeed> Printer<T, Model> {
+    pub fn print_and_reverse_feed(&mut self, amount: u8){
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x03,
+            PRINT_AND_REVERSE_FEED,
+            [amount]
+        });
+        let _ = self.sink.flush();
+    }
+}
+
+impl<T:Write, Model: SelectPageMode> Printer<T, Model> {
+    pub fn select_page_mode(&mut self) {
+        let _ = self.sink.write(SELECT_PAGE_MODE.as_slice());
+        let _ = self.sink.flush();
+    }
+}
+
+impl<T:Write, Model: SelectCharacterFont> Printer <T, Model> {
+    pub fn select_character_font(&mut self, font: u8){
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x03,
+            SELECT_CHARACTER_FONT,
+            [font]
+        });
+    }
+}
+
+impl<T:Write, Model: SelectStandardMode> Printer<T, Model> {
+    pub fn select_standard_mode(&mut self){
+        let _ = self.sink.write(SELECT_STANDARD_MODE.as_slice());
         let _ = self.sink.flush();
     }
 }

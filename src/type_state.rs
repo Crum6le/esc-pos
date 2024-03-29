@@ -15,6 +15,13 @@ pub trait SpecifyBatchPrint {}
 pub trait SelectBitImageMode {}
 pub trait SelectDefaultLineSpacing {}
 pub trait ReturnHome {}
+pub trait CancelUserDefinedCharacters {}
+pub trait SetHorizontalTab {}
+pub trait ToggleDoubleStrikeMode {}
+pub trait PrintAndReverseFeed {}
+pub trait SelectPageMode {}
+pub trait SelectCharacterFont {}
+pub trait SelectStandardMode {}
 
 pub struct EUM30;
 pub struct TMJ2000;
