@@ -437,10 +437,42 @@ impl<T:Write, Model: SelectCharacterFont> Printer <T, Model> {
     }
 }
 
-impl<T:Write, Model: SelectStandardMode> Printer<T, Model> {
+impl<T: Write, Model: SelectStandardMode> Printer<T, Model> {
     pub fn select_standard_mode(&mut self){
         let _ = self.sink.write(SELECT_STANDARD_MODE.as_slice());
         let _ = self.sink.flush();
+    }
+}
+
+impl<T: Write, Model: SelectPrintDirectionInPageMode> Printer<T, Model> {
+    pub fn select_print_direction_in_page_mode(&mut self, direction: u8){
+        let _ = self.sink.write(gen_fixed_cmd!(
+            0x03,
+            SELECT_PRINT_DIRECTION_IN_PAGE_MODE,
+            [direction]
+        ));
+        let _ = self.sink.flush();
+    }
+}
+
+impl<T: Write, Model: ToggleUnidirectionalPrintMode> Printer<T, Model> {
+    pub fn toggle_unidirectional_print_mode(&mut self, mode: u8){
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x03,
+            TOGGLE_UNIDIRECTIONAL_PRINT_MODE,
+            [mode]
+        });
+        let _ = self.sink.flush();
+    }
+}
+
+impl<T: Write, Model: Toggle90ClockwiseMode> Printer<T, Model> {
+    pub fn toggle_90clockwise_mode(&mut self, mode: u8){
+        let _ = self.sink.write(gen_fixed_cmd!{
+            0x03,
+            TOGGLE_90_CLOCKWISE_ROTATION_MODE,
+            [mode]
+        });
     }
 }
 

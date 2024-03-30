@@ -22,6 +22,9 @@ pub trait PrintAndReverseFeed {}
 pub trait SelectPageMode {}
 pub trait SelectCharacterFont {}
 pub trait SelectStandardMode {}
+pub trait SelectPrintDirectionInPageMode {}
+pub trait ToggleUnidirectionalPrintMode {}
+pub trait Toggle90ClockwiseMode {}
 
 pub struct EUM30;
 pub struct TMJ2000;
