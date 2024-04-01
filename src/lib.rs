@@ -10,6 +10,7 @@ mod macros;
 use type_state::*;
 
 use crate::consts::*;
+use crate::type_state::*;
 
 pub struct Printer<T: Write, Model> {
     sink: T,
@@ -59,8 +60,6 @@ impl<T: Write, Model> Printer<T, Model> {
         let _ = self.sink.flush();
     }
 
-    //-------------
-
     pub fn test_print(&mut self) {
         let _ = self.sink.write(gen_fixed_cmd! {
             0x07,
@@ -71,11 +70,12 @@ impl<T: Write, Model> Printer<T, Model> {
         let _ = self.sink.flush();
     }
 
-    pub fn paper_cut(&mut self, cut_mode: u8, vertical_motion: Option<u8>) {
+    pub fn paper_cut(&mut self, cut_mode: PAPERCUT_MODE, vertical_motion: Option<u8>) {
         let _ = self.sink.write(gen_fixed_cmd! {
             0x04,
             SELECT_PAPER_CUT_MODE_AND_CUT,
-            [cut_mode, vertical_motion.unwrap_or(0x00)]
+            cut_mode,
+            [vertical_motion.unwrap_or(0x00)]
         });
         let _ = self.sink.flush();
     }

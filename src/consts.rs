@@ -225,7 +225,7 @@ def_cmd! { //Every Command has to be checked for Printer
                                                     //680->DataMatrix: Store the data in the symbol storage area
                                                     //681->DataMatrix: Print the symbol data in the symbol storage area
                                                     //682->DataMatrix: Transmit the size information of the symbol data in the symbol storage area
-    DEFINE_DOWNLOADED_BITIMAGE => [GS, b'*'],
+    DEFINE_DOWNLOADED_BITIMAGE => [GS, b'*'],   //BUG missing all "(" from here downwards 
     PRINT_DOWNLOADED_BITIMAGE => [GS, b'/'],
     TOGGLE_MACRO_RECORDING => [GS, b':'],
     TOGGLE_INVERSE_PRINT_MODE => [GS, b'B'],
@@ -241,7 +241,7 @@ def_cmd! { //Every Command has to be checked for Printer
     SET_HORIZONTAL_AND_VERTICAL_MOTION_UNITS => [GS, b'P'],
     PRINT_VARIABLE_VERTICAL_SIZE_BIT_IMAGE => [GS, b'Q', 0x30],
     SET_PRINT_POSITION_TO_THE_BEGINING_OF_PRINT_LINE => [GS, b'T'],
-    SELECT_PAPER_CUT_MODE_AND_CUT => [GS, b'V'],
+    SELECT_PAPER_CUT_MODE_AND_CUT => [GS, b'(' ,b'V'],
     SET_PRINT_AREA_WIDTH => [GS, b'W'],
     SET_RELATIVE_VERTICAL_PRINT_POSITION_IN_PAGEMODE => [GS, b'\\'],
     EXECUTE_MACRO => [GS, b'^'],

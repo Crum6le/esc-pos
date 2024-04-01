@@ -71,3 +71,9 @@ pub struct TMT88VII;
 pub struct TMT90;
 pub struct TMU220;
 pub struct TMU230;
+
+pub enum PAPERCUT_MODE{
+    Cut = 48,
+    FeedAndCut = 49,
+    CutReservation = 51
+}
